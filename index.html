@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Focus Garden</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#08150f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Focus Garden">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f3ec;--bg2:#dbe8d8;--glass:rgba(255,255,255,.66);--line:rgba(22,50,42,.14);--ink:#14302a;--mute:#5d7569;--gold:#a97b1f;--btn:#14302a;--btnink:#f1f3ec;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#08150f;--bg2:#12302a;--glass:rgba(255,255,255,.06);--line:rgba(233,240,230,.14);--ink:#ecf2ea;--mute:#8fab9d;--gold:#e0bd72;--btn:#e0bd72;--btnink:#08150f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#08150f;--bg2:#12302a;--glass:rgba(255,255,255,.06);--line:rgba(233,240,230,.14);--ink:#ecf2ea;--mute:#8fab9d;--gold:#e0bd72;--btn:#e0bd72;--btnink:#08150f;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:radial-gradient(120% 60% at 50% -10%,var(--bg2),var(--bg) 70%) fixed var(--bg);color:var(--ink);font:400 15px/1.5 Manrope,system-ui,sans-serif}
+main{max-width:520px;margin:0 auto;padding:6px 16px 110px}
+header{max-width:520px;margin:0 auto;padding:16px 16px 4px;display:flex;justify-content:space-between;align-items:center}
+.brand{font:600 22px Fraunces,Georgia,serif;letter-spacing:-.01em}
+h2{font:600 24px/1.15 Fraunces,Georgia,serif;margin:6px 0 2px}
+.sm{color:var(--mute);font-size:13px;margin:0 0 10px}
+.card,.pc{background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin:10px 0;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.card h3{font:600 13px Manrope,sans-serif;color:var(--mute);margin:0 0 8px}
+.stage{text-align:center}
+.garden{display:grid;grid-template-columns:repeat(auto-fit,minmax(86px,1fr));gap:2px;margin:6px 0 0;padding:10px 4px 0;border-radius:26px 26px 0 0;background:linear-gradient(var(--glass),transparent)}
+.pl svg{width:100%;max-width:104px;display:block;margin:0 auto}
+.pl b{display:block;font-size:12px;font-weight:700}.pl small{display:block;color:var(--mute);font-size:11px;min-height:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px}
+.ringwrap{position:relative;width:236px;height:236px;margin:14px auto 4px}
+.ringwrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.rt{fill:none;stroke:var(--line);stroke-width:5}
+.rp{fill:none;stroke:var(--gold);stroke-width:5;stroke-linecap:round;stroke-dasharray:603;stroke-dashoffset:603;transition:stroke-dashoffset .4s linear;filter:drop-shadow(0 0 6px var(--gold))}
+#clock{position:absolute;inset:0;display:grid;place-items:center;font:600 56px Fraunces,Georgia,serif;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+#msg{min-height:42px;margin:0 10px 10px;color:var(--mute)}
+.btn{display:block;width:100%;background:var(--btn);color:var(--btnink);border:0;border-radius:16px;padding:15px;font:700 16px Manrope,sans-serif;cursor:pointer;margin:8px 0}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0}
+.chip{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:7px 14px;font:600 13px Manrope,sans-serif;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--gold);color:var(--btnink);border-color:var(--gold)}
+.chip:disabled{opacity:.4;cursor:not-allowed}
+input,textarea,select{width:100%;background:var(--glass);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:11px 12px;font:inherit;margin:4px 0}
+textarea{resize:none;height:64px}
+.rw,.pc{display:flex;gap:12px;align-items:center;justify-content:space-between;text-align:left}
+.rw small,.pc small{display:block;color:var(--mute);font-size:12px}
+.av{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font:700 17px Fraunces,serif;color:#10211b;align-self:flex-start}
+.pi{flex:1;min-width:0}.pi p{margin:2px 0 4px;font-size:13px}
+.tags{display:flex;gap:5px;flex-wrap:wrap}.tags i{font-style:normal;font-size:11px;border:1px solid var(--line);border-radius:99px;padding:1px 8px;color:var(--mute)}
+.pill{font-size:12px;color:var(--gold);font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stats .card{text-align:center;margin:6px 0}.stats b{font:600 22px Fraunces,serif;display:block}.stats small{color:var(--mute);font-size:11px}
+.bars{display:flex;gap:10px;align-items:flex-end;justify-content:space-between;height:90px}
+.bars div{flex:1;text-align:center}.bars i{display:block;background:#3f9a4b;border-radius:6px;margin-bottom:4px;opacity:.85}.bars small{font-size:11px;color:var(--mute)}
+.meter{height:6px;background:var(--line);border-radius:9px;overflow:hidden;margin-top:8px}.meter i{display:block;height:100%;background:var(--gold)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:4px;padding:8px 12px calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--line)}
+nav button{flex:1;max-width:120px;background:transparent;border:0;color:var(--mute);font:700 13px Manrope,sans-serif;padding:10px 4px;border-radius:12px;cursor:pointer;position:relative}
+nav button[aria-current="true"]{color:var(--ink);background:var(--glass)}
+nav em{position:absolute;top:4px;right:10px;background:var(--gold);color:var(--btnink);font-style:normal;font-size:10px;border-radius:9px;padding:0 5px}
+#toast{position:fixed;left:16px;right:16px;bottom:84px;max-width:480px;margin:auto;background:var(--btn);color:var(--btnink);padding:12px 16px;border-radius:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .3s}
+#toast.on{opacity:1}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.rp{transition:none}}
+</style>
+</head>
+<body>
+<header><div class="brand">Focus Garden</div><div id="me"></div></header>
+<main id="v"></main>
+<nav id="nav"></nav>
+<div id="toast" role="status"></div>
+<button id="inst" class="chip" style="display:none;position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:60px">Install app</button>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* ===== PASTE YOUR FIREBASE CONFIG HERE (Firebase console > Project settings > Your apps > Web) ===== */
+const FB={apiKey:"PASTE_API_KEY",authDomain:"PASTE_PROJECT.firebaseapp.com",projectId:"PASTE_PROJECT_ID",appId:"PASTE_APP_ID"};
+/* ================================================================================================= */
+const fbOK=typeof firebase!=='undefined'&&!FB.apiKey.startsWith('PASTE');
+const COLS=['#e0bd72','#6fcf97','#ee6f94','#c993ee','#7cc4f4','#f4a261'];
+const colorFor=id=>{let h=0;for(const c of id)h=(h*31+c.charCodeAt(0))>>>0;return COLS[h%COLS.length]};
+const $=s=>document.querySelector(s),esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SP=[
+ {id:'oak',n:'Oak',need:0,col:['#a8e68a','#43a14f','#1f6a3a']},
+ {id:'cherry',n:'Cherry blossom',need:3,col:['#ffe0ea','#f391b5','#b95a82']},
+ {id:'maple',n:'Maple',need:8,col:['#ffd98a','#ef7d3b','#a8321f']},
+ {id:'pine',n:'Pine',need:15,col:['#86d49a','#2f8a55','#14563a']}];
+const apkUrl=(()=>{const h=location.hostname;if(!h.endsWith('.github.io'))return'';const o=h.split('.')[0],seg=location.pathname.split('/')[1],r=seg&&!seg.includes('.')?seg:o+'.github.io';return 'https://github.com/'+o+'/'+r+'/releases/latest/download/focus-garden.apk'})();
+const inApp=document.referrer.startsWith('android-app://')||matchMedia('(display-mode:standalone)').matches;
+const isAndroid=/Android/i.test(navigator.userAgent);
+const WC=['#e3d4aa','#aa966b','#6e5b3d'];
+const TIT=['Seed','Sprout','Sapling','Young tree','Grove keeper'],TH=[0,3,8,15,30];
+const INT=['Study','Coding','Writing','Design','Reading','Fitness','Early bird','Night owl'];
+const TOP=['Deep work','Study','Writing','Reading','Quiet company'];
+const TIPS=['Break: stand up and stretch your shoulders.','Break: drink a glass of water.','Break: look out a window for 20 seconds.','Break: walk to another room and back.','Break: take five slow breaths.'];
+const LENS=[[25,'25 min'],[50,'50 min'],[1,'1 min demo']];
+let L={log:[],alarm:{t:'09:00',on:false,fired:''},sp:'oak',len:25,goal:4,subj:'',theme:'auto',seen:0};
+try{Object.assign(L,JSON.parse(localStorage.getItem('fgc3')||'{}'))}catch(e){}
+const sv=()=>{try{localStorage.setItem('fgc3',JSON.stringify(L))}catch(e){}};
+const applyTheme=()=>{if(L.theme==='auto')delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=L.theme};applyTheme();
+let db=null,me={id:'solo',name:'You',color:'#e0bd72'},prof={bio:'',interests:[],g:''},profs={},groups={},reqs=[],pres={},rooms=[],room='',tab='focus';
+let S={mode:'alone',start:0,len:25,ws:0,fin:0,cs:-1,done:null,brk:0,tip:'',jt:0,pc:0,nz:0,sig:''};
+const ymd=d=>d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+const fmt=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+const lv=t=>{let l=0;TH.forEach((h,i)=>{if(t>=h)l=i});return l};
+const spOf=id=>SP.find(s=>s.id===id)||SP[0];
+const todayN=()=>L.log.filter(x=>x.d===ymd(new Date())).length;
+function streak(){const s=new Set(L.log.map(x=>x.d));let n=0,d=new Date();if(!s.has(ymd(d)))d.setDate(d.getDate()-1);while(s.has(ymd(d))){n++;d.setDate(d.getDate()-1)}return n}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),3500)}
+function chime(n=1){try{const c=new(window.AudioContext||window.webkitAudioContext)();for(let i=0;i<n*2;i++){const o=c.createOscillator(),g=c.createGain();o.frequency.value=i%2?784:988;o.connect(g);g.connect(c.destination);const t=c.currentTime+i*.28;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.2,t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+.5);o.start(t);o.stop(t+.55)}}catch(e){}}
+let nzc=null;
+function noise(on){if(!on){if(nzc){nzc.close();nzc=null}return}try{const c=new(window.AudioContext||window.webkitAudioContext)(),b=c.createBuffer(1,c.sampleRate*2,c.sampleRate),d=b.getChannelData(0);let l=0;for(let i=0;i<d.length;i++){l=(l+.02*(Math.random()*2-1))/1.02;d[i]=l*3.5}const s=c.createBufferSource();s.buffer=b;s.loop=true;const g=c.createGain();g.gain.value=.25;s.connect(g);g.connect(c.destination);s.start();nzc=c}catch(e){}}
+
+/* ---------- realistic-style tree ---------- */
+let gid=0;
+function tree(p,w,sp){const id='g'+(gid++),C=w?WC:sp.col,base=114,ht=6+p*44,tw=2+p*4.5,top=base-ht,lean=w?5:0;
+ let R=p<.18?0:Math.min(36,(p-.18)/.82*36)*(w?.72:1);
+ let g=`<defs><radialGradient id="${id}" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="${C[0]}"/><stop offset=".55" stop-color="${C[1]}"/><stop offset="1" stop-color="${C[2]}"/></radialGradient><linearGradient id="${id}t" x1="0" x2="1"><stop offset="0" stop-color="#8f694a"/><stop offset="1" stop-color="#4b3222"/></linearGradient></defs>`;
+ g+=`<ellipse cx="60" cy="${base+2}" rx="${20+p*16}" ry="5" fill="rgba(0,0,0,.3)"/><ellipse cx="60" cy="${base+1}" rx="17" ry="4" fill="#6b4f3a"/>`;
+ g+=`<path d="M${60-tw} ${base} Q${60-tw*.5} ${base-ht*.5} ${60-tw*.4+lean} ${top} L${60+tw*.4+lean} ${top} Q${60+tw*.5} ${base-ht*.5} ${60+tw} ${base}Z" fill="url(#${id}t)"/>`;
+ if(R<=0){if(p>.04)g+=`<ellipse cx="${55+lean}" cy="${top+2}" rx="6" ry="3" fill="${C[1]}" transform="rotate(-25 ${55+lean} ${top+2})"/><ellipse cx="${66+lean}" cy="${top}" rx="6" ry="3" fill="${C[1]}" transform="rotate(25 ${66+lean} ${top})"/>`}
+ else if(sp.id==='pine'){const r=R*.72;for(let i=0;i<3;i++){const bY=top-r*.1-i*r*.62,aY=bY-r,hw=r*(1-i*.2);g+=`<polygon points="${60+lean-hw},${bY} ${60+lean},${aY} ${60+lean+hw},${bY}" fill="url(#${id})"/>`}}
+ else{const cy=top-R*.45,B=[[-.55,.1,.62],[.55,.1,.62],[0,.2,.7],[-.3,-.35,.6],[.35,-.35,.6],[0,-.6,.5]];
+  B.forEach(b=>g+=`<circle cx="${60+lean+b[0]*R}" cy="${cy+b[1]*R}" r="${b[2]*R}" fill="url(#${id})"/>`);
+  if(sp.id==='cherry'&&!w)for(let i=0;i<7;i++)g+=`<circle cx="${60+lean+Math.cos(i*2.4)*R*.8}" cy="${cy+Math.sin(i*3.1)*R*.6}" r="${1.6+R*.04}" fill="#fff" opacity=".75"/>`}
+ if(w)g+=`<ellipse cx="44" cy="${base-2}" rx="3" ry="1.5" fill="${C[1]}"/><ellipse cx="78" cy="${base}" rx="3" ry="1.5" fill="${C[1]}"/><ellipse cx="62" cy="${base+2}" rx="2.5" ry="1.2" fill="${C[2]}"/>`;
+ return `<svg viewBox="0 0 120 130" aria-hidden="true">${g}</svg>`}
+
+/* ---------- state helpers ---------- */
+const online=p=>p&&Date.now()-p.at<150000;
+function members(r){return Object.entries(pres).filter(([id,p])=>p.room===r.id&&online(p)).map(([id,p])=>({id,name:id===me.id?'You':p.name,sp:p.sp,sj:id===me.id?L.subj:p.sj,w:id===me.id?S.ws===r.startAt:(r.startAt&&p.wr===r.startAt),me:id===me.id}))}
+function cur(){if(room){const r=rooms.find(x=>x.id===room);if(!r)return null;return{r,start:r.startAt||0,len:r.len*6e4,mem:members(r)}}
+ return{start:S.start,len:(S.start?S.len:L.len)*6e4,mem:[{id:me.id,name:'You',sp:L.sp,sj:L.subj,w:S.start>0&&S.ws===S.start,me:1}]}}
+function phase(c){const n=Date.now();if(!c||!c.start)return'idle';return n<c.start?'wait':n<c.start+c.len?'run':'end'}
+const joinedOK=c=>!room||S.jt<=c.start+2000;
+function saveProf(){if(!db||me.id==='solo')return;db.doc('profiles/'+me.id).set({name:me.name,c:me.color||'',bio:prof.bio||'',interests:prof.interests||[],total:L.log.length,streak:streak(),sp:L.sp,g:prof.g||'',goal:L.goal,td:ymd(new Date()),today:todayN()}).catch(()=>{})}
+function pp(){if(!db)return;db.doc('presence/'+me.id).set({room:room||'',name:me.name,sp:L.sp,sj:L.subj||'',wr:S.ws||0,at:Date.now()}).catch(()=>{})}
+const rel=id=>{const r=reqs.find(x=>(x.a===me.id&&x.b===id)||(x.a===id&&x.b===me.id));return!r?'none':r.st==='ok'?'friend':r.a===me.id?'sent':'got'};
+
+function finish(c){const w=S.ws===c.start;S.done={ok:!w,mem:c.mem.filter(m=>!m.me)};
+ if(!w&&c.len>=6e4){L.log.push({d:ymd(new Date(c.start)),h:new Date(c.start).getHours()});sv();saveProf()}
+ chime(w?1:2);ui(true)}
+function tick(){const n=Date.now(),c=cur();
+ if(c&&c.start!==S.cs){S.cs=c.start;S.done=null}
+ const ph=phase(c);
+ if(ph==='end'&&S.fin!==c.start&&joinedOK(c)){S.fin=c.start;finish(c)}
+ const clk=$('#clock');if(!clk)return;
+ let txt,prog=0,msg='';
+ if(S.brk>n){txt=fmt(S.brk-n);prog=1-(S.brk-n)/3e5;msg=S.tip}
+ else{if(S.brk){S.brk=0;chime();ui(true);return}
+  if(ph==='run'){txt=fmt(c.start+c.len-n);prog=(n-c.start)/c.len;msg=S.ws===c.start?'You left, so your tree wilted. The others keep growing.':'Stay here. Leaving the app wilts your tree.'}
+  else if(ph==='wait'){txt=fmt(c.start-n);msg='Starting now. Get ready.'}
+  else{txt=fmt(c?c.len:L.len*6e4);msg=ph==='end'?'Round complete.':room?'Waiting for the host to start.':'Pick a length and start.'}}
+ clk.textContent=txt;$('#rg').style.strokeDashoffset=603*(1-Math.min(1,prog));$('#msg').textContent=msg;
+ const mem=c?c.mem:[],p=ph==='end'?1:Math.min(1,Math.max(0,prog)),sig=mem.map(m=>m.id+m.sp+m.sj+(m.w?'w':'')+(p*40|0)).join()+ph;
+ if(sig!==S.sig){S.sig=sig;$('#garden').innerHTML=mem.map(m=>{const pct=ph==='run'?Math.round(p*100)+'%':'';return `<div class="pl">${tree(m.w?Math.min(p,.55):ph==='idle'||ph==='wait'?.12:Math.max(.12,p),m.w,spOf(m.sp))}<b>${esc(m.name)}</b><small>${m.w?'wilted':p>=1?'fully grown':[pct,m.sj].filter(Boolean).map(esc).join(' · ')}</small></div>`}).join('')}}
+
+/* ---------- views ---------- */
+function vWelcome(){return `<section class="stage" style="padding-top:18px"><div style="width:170px;margin:0 auto">${tree(1,0,SP[0])}</div><h2 style="font-size:32px;margin-top:10px">Study together.<br>Grow a forest.</h2><p class="sm">Focus alone or with friends. Every finished session grows your tree. Leave the app and it wilts.</p>${fbOK?'<button class="btn" data-a="gsign">Continue with Google</button>':''}<button class="btn ghost" data-a="solo">Study alone for now</button></section>`}
+function vFocus(){const c=cur(),ph=phase(c),inRoom=room&&c;
+ const grp=!!inRoom||S.mode==='group',tg=`<div class="chips"><button class="chip" aria-pressed="${!grp}" data-a="alone">Study alone</button><button class="chip" aria-pressed="${grp}" data-a="group">Study with a group</button></div>`;
+ if(!inRoom&&S.mode==='group'){const G=groups[prof.g];return `<section class="stage">${tg}<h2>Study with others</h2><p class="sm">Join an open room or start one for your friends.</p><div class="card">${db?(prof.g?`<button class="btn" data-a="gstart">Start a room for ${esc(G?G.name:'your garden')}</button>`:'')+`<button class="btn ghost" data-a="tab" data-v="rooms">Browse open rooms</button>`+(prof.g?'':`<button class="btn ghost" data-a="tab" data-v="garden">Create or join a garden</button>`):offline()}</div></section>`}
+ let ctl='';
+ if(S.brk>Date.now())ctl=`<button class="btn ghost" data-a="skip">Skip break</button>`;
+ else{
+  if(ph==='end'&&S.done)ctl+=`<div class="card"><b>${S.done.ok?'Your tree is fully grown.':'Your tree wilted.'}</b><p class="sm">${S.done.mem.length?'People in this garden:':''}</p><div class="chips">${S.done.mem.map(m=>{const r=rel(m.id);return r==='none'&&db?`<button class="chip" data-a="wave" data-v="${m.id}">Say hi to ${esc(m.name)}</button>`:`<span class="sm">${esc(m.name)}${r==='friend'?' (friend)':r==='sent'?' (request sent)':''}</span>`}).join('')}</div><button class="btn ghost" data-a="brk">Take a 5-min break</button></div>`;
+  if(inRoom){if(c.r.host===me.id&&(ph==='idle'||ph==='end'))ctl+=`<button class="btn" data-a="rstart">Start for everyone</button>`;
+   ctl+=`<button class="btn ghost" data-a="leave">Leave room</button>`}
+  else if(ph==='run'||ph==='wait')ctl+=`<button class="btn ghost" data-a="giveup">Give up</button>`;
+  else ctl+=`<input id="sj" maxlength="30" placeholder="What are you studying?" value="${esc(L.subj)}"><div class="chips">${LENS.map(x=>`<button class="chip" aria-pressed="${x[0]===L.len}" data-a="len" data-v="${x[0]}">${x[1]}</button>`).join('')}</div><button class="btn" data-a="start">Start session</button>`}
+ return `<section class="stage">${tg}<h2>${inRoom?esc(c.r.name):'Solo garden'}</h2><p class="sm">${inRoom?esc(c.r.topic)+' · hosted by '+esc(c.r.hn):(prof.g?'Solo sessions still count in your garden.':'Switch to group mode to grow with other people.')}</p>
+ <div id="garden" class="garden"></div><div class="ringwrap"><svg viewBox="0 0 220 220"><circle class="rt" cx="110" cy="110" r="96"/><circle id="rg" class="rp" cx="110" cy="110" r="96"/></svg><div id="clock">25:00</div></div>
+ <p id="msg"></p><p class="sm">Today: ${todayN()} of ${L.goal} sessions</p>${ctl}<div class="chips"><button class="chip" aria-pressed="${!!S.nz}" data-a="noise">Brown noise</button></div></section>`}
+
+const offline=()=>fbOK?`<div class="card"><b>Sign in to meet people</b><p class="sm">Use your Google account to join rooms, add friends, and share a garden. Solo focus works without it.</p><button class="btn" data-a="gsign">Continue with Google</button></div>`:`<div class="card"><b>Setup needed</b><p class="sm">Add your Firebase config at the top of index.html to turn on Google sign-in. Solo focus still works.</p></div>`;
+function vRooms(){if(!db)return offline();const now=Date.now();
+ const list=rooms.filter(r=>now-r.created<6*36e5).sort((a,b)=>b.created-a.created).map(r=>{const st=!r.startAt?'Waiting to start':now<r.startAt+r.len*6e4?'In progress':'Finished';
+  return `<div class="card rw"><div><b>${esc(r.name)}</b><small>${esc(r.topic)} · ${r.len} min · ${members(r).length} here · ${st}</small></div>${room===r.id?'<span class="pill">Joined</span>':`<button class="chip" data-a="join" data-v="${r.id}">Join</button>`}</div>`}).join('')||`<p class="sm">No open rooms yet. Create the first one.</p>`;
+ return `<h2>Rooms</h2><p class="sm">Join a room to focus with other people. Finish together, then say hi.</p>
+ <div class="card"><h3>Create a room</h3><input id="rn" maxlength="40" placeholder="Room name, e.g. Quiet library"><select id="rt">${TOP.map(t=>`<option>${t}</option>`).join('')}</select><select id="rl">${LENS.map(x=>`<option value="${x[0]}">${x[1]}</option>`).join('')}</select><button class="btn" data-a="create">Create and join</button></div>${list}`}
+function pcard(id,p){const r=rel(id),b=r==='friend'?'<span class="pill">Friends</span>':r==='sent'?'<span class="pill">Requested</span>':r==='got'?`<button class="chip" data-a="accept" data-v="${id}">Accept</button>`:`<button class="chip" data-a="wave" data-v="${id}">Add friend</button>`;
+ return `<div class="pc"><div class="av" style="background:${esc(p.c||'#e0bd72')}">${esc((p.name||'?')[0])}</div><div class="pi"><b>${esc(p.name)}</b><small>${TIT[lv(p.total||0)]} · ${p.streak||0} day streak${online(pres[id])?' · '+(pres[id].room?'Focusing now':'Online'):''}</small><p>${esc(p.bio||'')}</p><div class="tags">${(p.interests||[]).map(i=>`<i>${esc(i)}</i>`).join('')}</div></div>${b}</div>`}
+function vPeople(){if(!db)return offline();
+ const inc=reqs.filter(r=>r.b===me.id&&r.st==='pending'),fr=Object.keys(profs).filter(id=>id!==me.id&&rel(id)==='friend'),mine=prof.interests||[];
+ const dis=Object.keys(profs).filter(id=>id!==me.id&&rel(id)!=='friend').sort((a,b)=>((profs[b].interests||[]).filter(i=>mine.includes(i)).length)-((profs[a].interests||[]).filter(i=>mine.includes(i)).length));
+ return `<h2>People</h2><p class="sm">Find study buddies with similar interests.</p>
+ ${inc.length?`<div class="card"><h3>Friend requests</h3>${inc.map(r=>`<div class="rw"><b>${esc(profs[r.a]?profs[r.a].name:r.an)}</b><button class="chip" data-a="accept" data-v="${r.a}">Accept</button></div>`).join('')}</div>`:''}
+ ${fr.length?`<h3 class="sm">Friends</h3>${fr.map(id=>pcard(id,profs[id])).join('')}`:''}
+ <h3 class="sm">Discover</h3>${dis.map(id=>pcard(id,profs[id])).join('')||'<p class="sm">No one else is here yet. Send your friends the site link.</p>'}`}
+function vGarden(){if(!db)return offline();const g=prof.g;
+ if(!g)return `<h2>Study garden</h2><p class="sm">A private garden for your friends. Everyone's tree grows as they finish sessions.</p><div class="card"><h3>Create a garden</h3><input id="gn" maxlength="30" placeholder="Garden name, e.g. Finals crew"><button class="btn" data-a="gcreate">Create garden</button></div><div class="card"><h3>Join with a code</h3><input id="gc" maxlength="8" placeholder="Invite code"><button class="btn ghost" data-a="gjoin">Join garden</button></div>`;
+ const G=groups[g]||{name:'Your garden'},td=ymd(new Date()),ms=Object.keys(profs).filter(id=>profs[id].g===g).map(id=>{const p=profs[id];return{id,p,n:p.td===td?p.today||0:0,goal:p.goal||4}}).sort((a,b)=>b.n/b.goal-a.n/a.goal||(b.p.total||0)-(a.p.total||0));
+ return `<h2>${esc(G.name)}</h2><p class="sm">${ms.length} in this garden. Each tree grows toward that person's daily goal.</p><div class="garden">${ms.map(m=>`<div class="pl">${tree(Math.min(1,.12+m.n/m.goal*.88),0,spOf(m.p.sp))}<b>${esc(m.id===me.id?'You':m.p.name)}</b><small>${m.n} of ${m.goal} today</small></div>`).join('')}</div><div class="card"><h3>Leaderboard</h3>${ms.map((m,i)=>`<div class="rw"><div><b>${i+1}. ${esc(m.p.name)}</b><small>${m.n} today · ${m.p.streak||0} day streak · ${m.p.total||0} total${online(pres[m.id])?' · '+(pres[m.id].room?'focusing now':'online'):''}</small></div></div>`).join('')}</div><button class="btn" data-a="gstart">Start a study room for the garden</button><div class="card"><h3>Invite friends</h3><p>Code: <b>${esc(g)}</b></p><p class="sm">Friends open the site, tap Garden, and enter the code.</p><button class="btn ghost" data-a="gcopy">Copy code</button></div><button class="btn ghost" data-a="gleave">Leave garden</button>`}
+function vMe(){const t=L.log.length,l=lv(t),nx=TH[l+1],A=L.alarm;
+ const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return[d,L.log.filter(x=>x.d===ymd(d)).length]}),mx=Math.max(1,...days.map(x=>x[1]));
+ const hr={};L.log.forEach(x=>hr[x.h]=(hr[x.h]||0)+1);const bh=Object.keys(hr).sort((a,b)=>hr[b]-hr[a])[0];
+ return `<h2>${esc(me.name)}</h2><p class="sm">${TIT[l]}${nx?' · '+(nx-t)+' more sessions to level up':' · top level'}</p><div class="meter"><i style="width:${nx?(t-TH[l])/(nx-TH[l])*100:100}%"></i></div>
+ <div class="stats"><div class="card"><b>${t}</b><small>trees grown</small></div><div class="card"><b>${streak()}</b><small>day streak</small></div><div class="card"><b>${bh==null?'-':((+bh+11)%12+1)+(+bh<12?'am':'pm')}</b><small>best hour</small></div></div>
+ <div class="card"><h3>This week</h3><div class="bars">${days.map(([d,n])=>`<div><i style="height:${8+n/mx*60}px"></i><small>${'SMTWTFS'[d.getDay()]}</small></div>`).join('')}</div></div>
+ <div class="card"><h3>Daily goal (sessions)</h3><div class="chips">${[2,4,6,8].map(n=>`<button class="chip" aria-pressed="${L.goal===n}" data-a="goal" data-v="${n}">${n}</button>`).join('')}</div></div>
+ <div class="card"><h3>About you</h3><textarea id="bio" maxlength="120" placeholder="One line about what you study">${esc(prof.bio)}</textarea><div class="chips">${INT.map(i=>`<button class="chip" aria-pressed="${(prof.interests||[]).includes(i)}" data-a="int" data-v="${i}">${i}</button>`).join('')}</div></div>
+ <div class="card"><h3>Your tree</h3><div class="chips">${SP.map(s=>`<button class="chip" aria-pressed="${L.sp===s.id}" data-a="sp" data-v="${s.id}" ${t>=s.need?'':'disabled'}>${s.n}${t>=s.need?'':' ('+s.need+')'}</button>`).join('')}</div></div>
+ <div class="card"><h3>Daily study alarm</h3><div class="rw"><input id="at" type="time" value="${A.t}" style="width:auto"><label><input id="ao" type="checkbox" style="width:auto" ${A.on?'checked':''}> On</label><button class="chip" data-a="test">Test sound</button></div><p class="sm">Rings while this app is open. For an alarm that works anytime, also set one in your phone's clock app.</p></div>
+ ${apkUrl&&isAndroid&&!inApp?`<div class="card"><h3>Android app</h3><a class="btn" style="text-align:center;text-decoration:none" href="${apkUrl}">Download the Android app</a></div>`:''}<div class="card"><h3>Theme</h3><div class="chips">${['auto','light','dark'].map(x=>`<button class="chip" aria-pressed="${L.theme===x}" data-a="theme" data-v="${x}">${x[0].toUpperCase()+x.slice(1)}</button>`).join('')}</div></div>${db?'<button class="btn ghost" data-a="gout">Sign out</button>':offline()}`}
+
+function nav(){const n=reqs.filter(r=>r.b===me.id&&r.st==='pending').length;
+ $('#nav').innerHTML=[['focus','Focus'],['garden','Garden'],['rooms','Rooms'],['people','People'],['me','Me']].map(([k,l])=>`<button data-a="tab" data-v="${k}" aria-current="${tab===k}">${l}${k==='people'&&n?`<em>${n}</em>`:''}</button>`).join('');
+ $('#me').innerHTML=db?`<div class="av" style="background:${esc(me.color)};width:34px;height:34px;font-size:14px">${esc((me.name||'?')[0])}</div>`:(fbOK?'<button class="chip" data-a="gsign">Sign in</button>':'')}
+function ui(force){const welcome=!L.seen&&!db;
+ if(!force){if(tab==='focus'&&phase(cur())==='run')return;if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return}
+ $('#v').innerHTML=welcome?vWelcome():({focus:vFocus,garden:vGarden,rooms:vRooms,people:vPeople,me:vMe})[tab]();
+ nav();$('#nav').style.display=welcome?'none':'flex';S.sig='';tick()}
+
+const A={
+ tab(v){tab=v;ui(true)},len(v){L.len=+v;sv();ui(true)},
+ start(){S.start=Date.now()+1500;S.len=L.len;S.ws=0;S.done=null;pp();ui(true)},
+ giveup(){S.ws=S.start;S.fin=S.start;S.start=0;S.cs=0;S.done={ok:false,mem:[]};ui(true)},
+ brk(){S.tip=TIPS[Math.floor(Math.random()*TIPS.length)];S.brk=Date.now()+3e5;ui(true)},skip(){S.brk=0;ui(true)},
+ sp(v){L.sp=v;sv();saveProf();pp();ui(true)},goal(v){L.goal=+v;sv();saveProf();ui(true)},
+ theme(v){L.theme=v;sv();applyTheme();ui(true)},noise(){S.nz=S.nz?0:1;noise(S.nz);ui(true)},
+ solo(){L.seen=1;sv();ui(true)},
+ int(v){const a=prof.interests||[];prof.interests=a.includes(v)?a.filter(x=>x!==v):[...a,v];saveProf();ui(true)},
+ join(v){room=v;S.mode='group';S.jt=Date.now();S.done=null;S.ws=0;pp();tab='focus';ui(true)},
+ leave(){room='';S.mode='alone';pp();ui(true)},
+ alone(){if(room){room='';pp()}S.mode='alone';ui(true)},
+ group(){const ph=phase(cur());if(!room&&(ph==='run'||ph==='wait')){toast('Finish or give up your solo session first.');return}S.mode='group';ui(true)},
+ create(){const n=$('#rn').value.trim()||'Study room';db.collection('rooms').add({name:n,topic:$('#rt').value,len:+$('#rl').value,host:me.id,hn:me.name,startAt:0,created:Date.now()}).then(r=>A.join(r.id)).catch(()=>toast('Could not create the room.'))},
+ rstart(){db.doc('rooms/'+room).update({startAt:Date.now()+5000}).catch(()=>toast('Only the host can start the room.'))},
+ wave(v){db.doc('requests/'+me.id+'_'+v).set({a:me.id,b:v,st:'pending',an:me.name,at:Date.now()}).then(()=>toast('Friend request sent.')).catch(()=>toast('Could not send the request.'))},
+ accept(v){const r=reqs.find(x=>x.a===v&&x.b===me.id);if(r)db.doc('requests/'+r.id).update({st:'ok'}).then(()=>toast('You are now friends.')).catch(()=>{})},
+ test(){chime(2)},
+ gsign(){const a=firebase.auth(),p=new firebase.auth.GoogleAuthProvider();a.signInWithPopup(p).catch(()=>a.signInWithRedirect(p))},
+ gout(){firebase.auth().signOut().then(()=>location.reload())},
+ gcreate(){const n=($('#gn').value||'').trim()||'Study garden',c=Math.random().toString(36).slice(2,7).toUpperCase();db.doc('groups/'+c).set({name:n,owner:me.id,created:Date.now()}).then(()=>{prof.g=c;saveProf();ui(true);toast('Garden created. Share code '+c)}).catch(()=>toast('Could not create the garden.'))},
+ gjoin(){const c=($('#gc').value||'').trim().toUpperCase();if(!c)return;db.doc('groups/'+c).get().then(s=>{if(s.exists){prof.g=c;saveProf();ui(true);toast('Joined '+s.data().name)}else toast('No garden with that code.')}).catch(()=>toast('Could not join.'))},
+ gleave(){prof.g='';saveProf();ui(true)},
+ gstart(){const G=groups[prof.g]||{name:'Study room'};db.collection('rooms').add({name:G.name,topic:'Study',len:L.len,host:me.id,hn:me.name,startAt:0,created:Date.now()}).then(r=>A.join(r.id)).catch(()=>toast('Could not start the room.'))},
+ gcopy(){try{navigator.clipboard.writeText(prof.g);toast('Code copied.')}catch(e){toast('Code: '+prof.g)}}
+};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&A[b.dataset.a])A[b.dataset.a](b.dataset.v)});
+document.addEventListener('change',e=>{const i=e.target.id;
+ if(i==='bio'){prof.bio=e.target.value;saveProf()}
+ if(i==='sj'){L.subj=e.target.value.trim();sv();pp()}
+ if(i==='at'){L.alarm.t=e.target.value;L.alarm.fired='';sv()}
+ if(i==='ao'){L.alarm.on=e.target.checked;sv();if(e.target.checked){try{Notification.requestPermission()}catch(x){}toast('Alarm set for '+L.alarm.t+'.')}}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)return;const c=cur();if(c&&phase(c)==='run'&&joinedOK(c)&&S.ws!==c.start){S.ws=c.start;pp()}});
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+let dip=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e;$('#inst').style.display='block'});
+$('#inst').onclick=()=>{if(dip){dip.prompt();dip=null;$('#inst').style.display='none'}};
+setInterval(tick,250);setInterval(pp,60000);
+setInterval(()=>{const a=L.alarm;if(!a.on)return;const n=new Date(),hm=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+ if(hm===a.t&&a.fired!==n.toDateString()){a.fired=n.toDateString();sv();chime(3);toast('Time to study. Your tree is waiting.');try{if(Notification.permission==='granted')new Notification('Focus Garden',{body:'Time to study. Your tree is waiting.'})}catch(e){}}},15000);
+
+function conn(){const er=()=>{};L.seen=1;sv();
+ db.collection('profiles').onSnapshot(s=>{profs={};s.docs.forEach(d=>profs[d.id]=d.data());const m=profs[me.id];if(m){prof.bio=m.bio||'';prof.interests=m.interests||[];prof.g=m.g||''}else if(!S.pc){S.pc=1;saveProf()}ui()},er);
+ db.collection('requests').onSnapshot(s=>{reqs=s.docs.map(d=>Object.assign({id:d.id},d.data()));ui()},er);
+ db.collection('presence').onSnapshot(s=>{pres={};s.docs.forEach(d=>pres[d.id]=d.data());ui()},er);
+ db.collection('groups').onSnapshot(s=>{groups={};s.docs.forEach(d=>groups[d.id]=d.data());ui()},er);
+ db.collection('rooms').onSnapshot(s=>{rooms=s.docs.map(d=>Object.assign({id:d.id},d.data()));ui()},er);pp()}
+ui(true);
+if(fbOK){firebase.initializeApp(FB);
+ firebase.auth().onAuthStateChanged(u=>{if(u){me={id:u.uid,name:u.displayName||'Friend',color:colorFor(u.uid)};db=firebase.firestore();conn()}ui(true)})}
+</script>
+</body>
+</html>

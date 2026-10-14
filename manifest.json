@@ -1,0 +1,14 @@
+{
+  "name": "Focus Garden",
+  "short_name": "Focus Garden",
+  "description": "Study alone or with friends. Grow a garden together.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#08150f",
+  "theme_color": "#08150f",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}
