@@ -1,0 +1,63 @@
+name: Setup and build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unpack the zip
+        run: |
+          if [ -f focus-garden-repo.zip ]; then
+            mkdir _x
+            unzip -q focus-garden-repo.zip -d _x
+            rm -rf _x/.github
+            cp -a _x/. .
+            rm -rf _x focus-garden-repo.zip
+            git config user.name "github-actions"
+            git config user.email "actions@github.com"
+            git add -A
+            git commit -m "Unpack Focus Garden files"
+            git push
+          fi
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Set site URL
+        working-directory: android
+        run: |
+          OWNER=$(echo "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')
+          REPO=${GITHUB_REPOSITORY#*/}
+          if [ "$(echo "$REPO" | tr '[:upper:]' '[:lower:]')" = "$OWNER.github.io" ]; then
+            URL="https://$OWNER.github.io/"
+          else
+            URL="https://$OWNER.github.io/$REPO/"
+          fi
+          echo "$URL" > site-url.txt
+
+      - name: Build signed APK
+        working-directory: android
+        run: gradle assembleRelease --no-daemon
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk focus-garden.apk
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest focus-garden.apk --title "Focus Garden (latest)" --notes "Download focus-garden.apk and install on Android." --target "$(git rev-parse HEAD)"
